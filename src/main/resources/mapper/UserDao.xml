@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forum.dao.UserDao">
+    <resultMap id="UserInfo" type="User">
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="user_email" property="userEmail" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="user_type" property="userType" jdbcType="INTEGER"/>
+        <result column="user_state" property="userState" jdbcType="INTEGER"/>
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <!-- 自增主键所用列表所用序列-->
+    <sql id="seq_user_id">SEQ_USER_ID.nextval</sql>
+
+    <insert id="addUser">
+        <selectKey keyProperty="userId" resultType="int" order="BEFORE">
+            select <include refid="seq_user_id" /> from dual
+        </selectKey>
+        insert into
+        t_user (user_id, user_name, password, user_email, create_time, last_login_time)
+        values (#{userId}, #{userName}, #{password}, #{userEmail}, sysdate, sysdate)
+    </insert>
+
+    <select id="queryAllUser" resultMap="UserInfo">
+        select * from t_user
+    </select>
+
+    <select id="queryUserByName" resultMap="UserInfo">
+        select * from t_user
+        where user_name = #{userName}
+    </select>
+
+    <select id="queryUserById" resultMap="UserInfo">
+        SELECT * FROM T_USER
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="queryUserAboutName" resultMap="UserInfo">
+        select * from t_user
+        where user_name like concat(concat('%',#{userName}),'%')
+    </select>
+
+    <select id="queryPageOfUser" resultMap="UserInfo">
+        select * from (select t.*,rownum rownu from t_user t
+        where rownum&lt;=#{offset}*#{limit})r
+        where r.rownu&gt;(#{offset}-1)*#{limit}
+    </select>
+
+    <delete id="deleteUser">
+        delete from t_user
+        where user_id = #{userId}
+    </delete>
+
+    <update id="lockUser">
+        update t_user
+        set user_state = #{userState}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateUserType">
+        update t_user
+        set user_type = #{userType}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateUser">
+        UPDATE t_user
+        SET user_name = #{userName},
+            password = #{password},
+            user_email = #{userEmail}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateUserLoginTime">
+        UPDATE t_user
+        SET last_login_time = sysdate
+        WHERE user_id = #{userId}
+    </update>
+</mapper>

@@ -1,0 +1,334 @@
+--------------------------------------------------------
+--  文件已创建 - 星期日-十二月-24-2017   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table T_BOARD
+--------------------------------------------------------
+
+  CREATE TABLE "WJY"."T_BOARD" 
+   (	"BOARD_ID" NUMBER, 
+	"BOARD_NAME" VARCHAR2(100 CHAR), 
+	"BOARD_DESCRIPTION" VARCHAR2(500 CHAR)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+   COMMENT ON COLUMN "WJY"."T_BOARD"."BOARD_ID" IS '板块id';
+   COMMENT ON COLUMN "WJY"."T_BOARD"."BOARD_NAME" IS '板块名称';
+   COMMENT ON COLUMN "WJY"."T_BOARD"."BOARD_DESCRIPTION" IS '模块描述';
+--------------------------------------------------------
+--  DDL for Table T_ITEM
+--------------------------------------------------------
+
+  CREATE TABLE "WJY"."T_ITEM" 
+   (	"ITEM_ID" NUMBER, 
+	"BOARD_ID" NUMBER, 
+	"USER_ID" NUMBER, 
+	"ITEM_TITLE" VARCHAR2(100 CHAR), 
+	"ITEM_STATE" NUMBER(1,0) DEFAULT 1, 
+	"ITEM_CREATE_TIME" DATE DEFAULT sysdate, 
+	"ITEM_CONTENT" LONG
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+   COMMENT ON COLUMN "WJY"."T_ITEM"."ITEM_ID" IS '条目id';
+   COMMENT ON COLUMN "WJY"."T_ITEM"."BOARD_ID" IS '条目所在版块名';
+   COMMENT ON COLUMN "WJY"."T_ITEM"."USER_ID" IS '创建条目的用户id';
+   COMMENT ON COLUMN "WJY"."T_ITEM"."ITEM_TITLE" IS '条目标题';
+   COMMENT ON COLUMN "WJY"."T_ITEM"."ITEM_STATE" IS '条目状态：0禁止1激活';
+   COMMENT ON COLUMN "WJY"."T_ITEM"."ITEM_CREATE_TIME" IS '条目创建时间';
+   COMMENT ON COLUMN "WJY"."T_ITEM"."ITEM_CONTENT" IS 'item内容';
+--------------------------------------------------------
+--  DDL for Table T_REPLY
+--------------------------------------------------------
+
+  CREATE TABLE "WJY"."T_REPLY" 
+   (	"REPLY_ID" NUMBER, 
+	"ITEM_ID" NUMBER, 
+	"USER_ID" NUMBER, 
+	"REPLY_TIME" DATE, 
+	"REPLY_CONTENT" LONG
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+   COMMENT ON COLUMN "WJY"."T_REPLY"."REPLY_ID" IS '回复id';
+   COMMENT ON COLUMN "WJY"."T_REPLY"."ITEM_ID" IS '条目id';
+   COMMENT ON COLUMN "WJY"."T_REPLY"."USER_ID" IS '用户id';
+   COMMENT ON COLUMN "WJY"."T_REPLY"."REPLY_TIME" IS '回复创建时间';
+   COMMENT ON COLUMN "WJY"."T_REPLY"."REPLY_CONTENT" IS '回复时间';
+--------------------------------------------------------
+--  DDL for Table T_USER
+--------------------------------------------------------
+
+  CREATE TABLE "WJY"."T_USER" 
+   (	"USER_ID" NUMBER, 
+	"USER_NAME" VARCHAR2(20 CHAR), 
+	"PASSWORD" VARCHAR2(20 CHAR), 
+	"USER_EMAIL" VARCHAR2(20 CHAR), 
+	"CREATE_TIME" DATE, 
+	"USER_TYPE" NUMBER(1,0) DEFAULT 0, 
+	"USER_STATE" NUMBER(1,0) DEFAULT 1, 
+	"LAST_LOGIN_TIME" DATE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+   COMMENT ON COLUMN "WJY"."T_USER"."USER_ID" IS '用户id';
+   COMMENT ON COLUMN "WJY"."T_USER"."USER_NAME" IS '用户名';
+   COMMENT ON COLUMN "WJY"."T_USER"."PASSWORD" IS '用户密码';
+   COMMENT ON COLUMN "WJY"."T_USER"."USER_EMAIL" IS '用户email';
+   COMMENT ON COLUMN "WJY"."T_USER"."CREATE_TIME" IS '用户创建时间';
+   COMMENT ON COLUMN "WJY"."T_USER"."USER_TYPE" IS '0为普通用户，1为管理员用户';
+   COMMENT ON COLUMN "WJY"."T_USER"."USER_STATE" IS '0被封号状态 1激活状态';
+   COMMENT ON COLUMN "WJY"."T_USER"."LAST_LOGIN_TIME" IS '用户最近登录时间';
+REM INSERTING into WJY.T_BOARD
+SET DEFINE OFF;
+Insert into WJY.T_BOARD (BOARD_ID,BOARD_NAME,BOARD_DESCRIPTION) values (1,'Oracle数据库','Oracle Database，又名Oracle RDBMS，或简称Oracle。是甲骨文公司的一款关系数据库管理系统。它是在数据库领域一直处于领先地位的产品。可以说Oracle数据库系统是目前世界上流行的关系数据库管理系统，系统可移植性好、使用方便、功能强，适用于各类大、中、小、微机环境。它是一种高效率、可靠性好的 适应高吞吐量的数据库解决方案。');
+Insert into WJY.T_BOARD (BOARD_ID,BOARD_NAME,BOARD_DESCRIPTION) values (2,'数据库','数据库(Database)是按照数据结构来组织、存储和管理数据的仓库，它产生于距今六十多年前，随着信息技术和市场的发展，特别是二十世纪九十年代以后，数据管理不再仅仅是存储和管理数据，而转变成用户所需要的各种数据管理的方式。数据库有很多种类型，从最简单的存储有各种数据的表格到能够进行海量数据存储的大型数据库系统都在各个方面得到了广泛的应用。');
+Insert into WJY.T_BOARD (BOARD_ID,BOARD_NAME,BOARD_DESCRIPTION) values (3,'Python','Python具有丰富和强大的库。它常被昵称为胶水语言，能够把用其他语言制作的各种模块（尤其是C/C++）很轻松地联结在一起。常见的一种应用情形是，使用Python快速生成程序的原型（有时甚至是程序的最终界面），然后对其中有特别要求的部分，用更合适的语言改写，比如3D游戏中的图形渲染模块，性能要求特别高，就可以用C/C++重写，而后封装为Python可以调用的扩展类库。需要注意的是在您使用扩展类库时可能需要考虑平台问题，某些可能不提供跨平台的实现。');
+Insert into WJY.T_BOARD (BOARD_ID,BOARD_NAME,BOARD_DESCRIPTION) values (4,'大数据','大数据（big data），指无法在一定时间范围内用常规软件工具进行捕捉、管理和处理的数据集合，是需要新处理模式才能具有更强的决策力、洞察发现力和流程优化能力的海量、高增长率和多样化的信息资产。');
+Insert into WJY.T_BOARD (BOARD_ID,BOARD_NAME,BOARD_DESCRIPTION) values (5,'深度学习','深度学习的概念源于人工神经网络的研究。含多隐层的多层感知器就是一种深度学习结构。深度学习通过组合低层特征形成更加抽象的高层表示属性类别或特征，以发现数据的分布式特征表示。
+深度学习的概念由Hinton等人于2006年提出。基于深度置信网络(DBN)提出非监督贪心逐层训练算法，为解决深层结构相关的优化难题带来希望，随后提出多层自动编码器深层结构。。。');
+REM INSERTING into WJY.T_ITEM
+SET DEFINE OFF;
+Insert into WJY.T_ITEM (ITEM_ID,BOARD_ID,USER_ID,ITEM_TITLE,ITEM_STATE,ITEM_CREATE_TIME,ITEM_CONTENT) values (1,1,1,'Oracle数据库的基本使用',1,to_date('15-11月-17','DD-MON-RR'),'Oracle数据库基本操作
+
+1.概述
+
+Oracle数据库客户端一般需要安装在服务器上，可以在服务器端操作，一般我们可以用sql developer工具远程连接到数据库，先行建立数据库，然后对表进行增删改查。也可以使用MyEclispse的DB Broswer工具进行连接数据库并进行简单的增删改查。
+
+2．SQL语句
+
+Data Definition Language（DDL）：
+
+主要用于建立、修改、删除数据库对象（表），不需要事务的参与
+
+CREATE:创建表
+
+CREATE TABLE emp(
+
+id NUMBER(10),
+
+name VARCHAR2(20),
+
+gender CHAR(1),
+
+birth DATE,
+
+salary NUMBER(6,2),
+
+);
+
+DESC :查询表结构
+
+DESC emp;
+
+RENAME:重命名表名
+
+RENAME emp TO employee;
+
+DROP：删除表
+
+DROP TABLE emp;
+
+ALTER:列（字段）操作
+
+ADD：增加字段
+
+ALTER TABLE employee ADD (birth DATE DEFAULT sysdate);
+
+MODITY：修改字段
+
+ALTER TABLE employee MODIFY (name VARCHAR2(40) DEFAULT ''CLERK'' );
+
+DROP：删除字段
+
+ALTER TABLE employee DROP (birth);
+
+Data Manipulation Language（DML）
+
+用于对数据记录进行操作，包括插入，删除，修改。需要commit才能真正确认操作，如果需要撤销则rollback。
+
+INSERT INTO：插入数据
+
+INSERT INTO employee(id, name, salary) VALUES(1001, ''rose'', 5500);
+
+UPDATE…SET..：更新数据
+
+UPDATE employee SET salary = 8500 WHERE name = ''ROSE'';
+
+DELETE FROM：删除记录
+
+DELETE FROM employee WHERE job is null;
+
+Transaction Control Language（TCL）
+
+事务控制语言，包括commit提交，rollback回滚，savepoint保存点（可以回退到指定保存点）。在sql developer中为图标。
+
+Data Query Language（DQL）
+
+SQL基础查询：
+
+查询语句的执行顺序
+
+FROM 子句：执行顺序为从后往前、从右到左。数据量较少的表尽量放在后面。
+
+');
+Insert into WJY.T_ITEM (ITEM_ID,BOARD_ID,USER_ID,ITEM_TITLE,ITEM_STATE,ITEM_CREATE_TIME,ITEM_CONTENT) values (6,3,1,'Python语言基本介绍',1,to_date('12-12月-17','DD-MON-RR'),'  Python是一种脚本语言，常被大家称为胶水语言。它有具有非常非常多的工具包以供我们使用。');
+Insert into WJY.T_ITEM (ITEM_ID,BOARD_ID,USER_ID,ITEM_TITLE,ITEM_STATE,ITEM_CREATE_TIME,ITEM_CONTENT) values (2,1,1,'Oracle数据库安装',1,to_date('05-12月-17','DD-MON-RR'),'去官网下载压缩包，然后解压缩，点击安装程序，按步骤安装就可以了。');
+REM INSERTING into WJY.T_REPLY
+SET DEFINE OFF;
+Insert into WJY.T_REPLY (REPLY_ID,ITEM_ID,USER_ID,REPLY_TIME,REPLY_CONTENT) values (3,1,1,to_date('03-12月-17','DD-MON-RR'),'Oracle 数据库好难用！');
+Insert into WJY.T_REPLY (REPLY_ID,ITEM_ID,USER_ID,REPLY_TIME,REPLY_CONTENT) values (5,1,4,to_date('05-12月-17','DD-MON-RR'),'我感觉还可以吧，毕竟是大型数据库嘛！');
+Insert into WJY.T_REPLY (REPLY_ID,ITEM_ID,USER_ID,REPLY_TIME,REPLY_CONTENT) values (6,1,1,to_date('18-12月-17','DD-MON-RR'),'Oracle 666');
+REM INSERTING into WJY.T_USER
+SET DEFINE OFF;
+Insert into WJY.T_USER (USER_ID,USER_NAME,PASSWORD,USER_EMAIL,CREATE_TIME,USER_TYPE,USER_STATE,LAST_LOGIN_TIME) values (6,'岳绮罗','123456','123223311@gmail.com',to_date('24-11月-17','DD-MON-RR'),0,1,to_date('24-11月-17','DD-MON-RR'));
+Insert into WJY.T_USER (USER_ID,USER_NAME,PASSWORD,USER_EMAIL,CREATE_TIME,USER_TYPE,USER_STATE,LAST_LOGIN_TIME) values (2,'wjy','123456','123456@qq.com',to_date('17-11月-17','DD-MON-RR'),1,1,to_date('24-12月-17','DD-MON-RR'));
+Insert into WJY.T_USER (USER_ID,USER_NAME,PASSWORD,USER_EMAIL,CREATE_TIME,USER_TYPE,USER_STATE,LAST_LOGIN_TIME) values (4,'张梦岳','123456','123456@qq.com',to_date('17-11月-17','DD-MON-RR'),0,1,to_date('05-12月-17','DD-MON-RR'));
+Insert into WJY.T_USER (USER_ID,USER_NAME,PASSWORD,USER_EMAIL,CREATE_TIME,USER_TYPE,USER_STATE,LAST_LOGIN_TIME) values (1,'张显宗','123456','123312@qq.com',to_date('18-11月-17','DD-MON-RR'),0,1,to_date('24-12月-17','DD-MON-RR'));
+--------------------------------------------------------
+--  DDL for Index T_BOARD_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "WJY"."T_BOARD_PK" ON "WJY"."T_BOARD" ("BOARD_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index T_ITEM_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "WJY"."T_ITEM_PK" ON "WJY"."T_ITEM" ("ITEM_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index T_REPLY_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "WJY"."T_REPLY_PK" ON "WJY"."T_REPLY" ("REPLY_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index T_USER_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "WJY"."T_USER_PK" ON "WJY"."T_USER" ("USER_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index T_USER_UK1
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "WJY"."T_USER_UK1" ON "WJY"."T_USER" ("USER_NAME") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  Constraints for Table T_BOARD
+--------------------------------------------------------
+
+  ALTER TABLE "WJY"."T_BOARD" ADD CONSTRAINT "T_BOARD_PK" PRIMARY KEY ("BOARD_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "WJY"."T_BOARD" MODIFY ("BOARD_NAME" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_BOARD" MODIFY ("BOARD_ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table T_ITEM
+--------------------------------------------------------
+
+  ALTER TABLE "WJY"."T_ITEM" MODIFY ("USER_ID" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_ITEM" ADD CONSTRAINT "T_ITEM_PK" PRIMARY KEY ("ITEM_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "WJY"."T_ITEM" MODIFY ("ITEM_TITLE" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_ITEM" MODIFY ("BOARD_ID" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_ITEM" MODIFY ("ITEM_ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table T_REPLY
+--------------------------------------------------------
+
+  ALTER TABLE "WJY"."T_REPLY" ADD CONSTRAINT "T_REPLY_PK" PRIMARY KEY ("REPLY_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "WJY"."T_REPLY" MODIFY ("USER_ID" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_REPLY" MODIFY ("ITEM_ID" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_REPLY" MODIFY ("REPLY_ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Constraints for Table T_USER
+--------------------------------------------------------
+
+  ALTER TABLE "WJY"."T_USER" ADD CONSTRAINT "T_USER_UK1" UNIQUE ("USER_NAME")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "WJY"."T_USER" ADD CONSTRAINT "T_USER_PK" PRIMARY KEY ("USER_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+  ALTER TABLE "WJY"."T_USER" MODIFY ("USER_STATE" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_USER" MODIFY ("USER_TYPE" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_USER" MODIFY ("USER_EMAIL" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_USER" MODIFY ("PASSWORD" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_USER" MODIFY ("USER_NAME" NOT NULL ENABLE);
+  ALTER TABLE "WJY"."T_USER" MODIFY ("USER_ID" NOT NULL ENABLE);
+--------------------------------------------------------
+--  Ref Constraints for Table T_ITEM
+--------------------------------------------------------
+
+  ALTER TABLE "WJY"."T_ITEM" ADD CONSTRAINT "T_ITEM_T_BOARD_FK1" FOREIGN KEY ("BOARD_ID")
+	  REFERENCES "WJY"."T_BOARD" ("BOARD_ID") ON DELETE CASCADE ENABLE;
+  ALTER TABLE "WJY"."T_ITEM" ADD CONSTRAINT "T_ITEM_T_USER_FK1" FOREIGN KEY ("USER_ID")
+	  REFERENCES "WJY"."T_USER" ("USER_ID") ON DELETE CASCADE ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table T_REPLY
+--------------------------------------------------------
+
+  ALTER TABLE "WJY"."T_REPLY" ADD CONSTRAINT "T_REPLY_T_ITEM_FK1" FOREIGN KEY ("ITEM_ID")
+	  REFERENCES "WJY"."T_ITEM" ("ITEM_ID") ON DELETE CASCADE ENABLE;
+  ALTER TABLE "WJY"."T_REPLY" ADD CONSTRAINT "T_REPLY_T_USER_FK1" FOREIGN KEY ("USER_ID")
+	  REFERENCES "WJY"."T_USER" ("USER_ID") ON DELETE CASCADE ENABLE;

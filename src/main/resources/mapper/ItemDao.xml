@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forum.dao.ItemDao">
+    <resultMap id="ItemInfo" type="Item">
+        <result column="item_id" property="itemId" jdbcType="INTEGER"/>
+        <result column="board_id" property="boardId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="item_title" property="itemTitle" jdbcType="VARCHAR"/>
+        <result column="item_content" property="itemContent" javaType="String" jdbcType="VARBINARY"/>
+        <result column="item_state" property="itemState" jdbcType="INTEGER"/>
+        <result column="item_create_time" property="itemCreateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="seq_item_id">seq_item_id.nextval</sql>
+
+    <insert id="addItem">
+        <selectKey keyProperty="itemId" resultType="int" order="BEFORE">
+            SELECT <include refid="seq_item_id"/> FROM dual
+        </selectKey>
+        INSERT INTO
+        t_item (item_id, board_id, user_id, item_title
+        <choose>
+            <when test="itemContent==null">
+                )
+                VALUES (#{itemId}, #{boardId}, #{userId}, #{itemTitle})
+            </when>
+            <otherwise>
+                , ITEM_CONTENT)
+                values (#{itemId}, #{boardId}, #{userId}, #{itemTitle}, #{itemContent});
+            </otherwise>
+        </choose>
+    </insert>
+
+    <delete id="deleteItem">
+        DELETE FROM T_ITEM
+        WHERE ITEM_ID = #{itemId}
+    </delete>
+
+    <select id="queryItemByBoardId" resultMap="ItemInfo">
+        SELECT *
+        FROM T_ITEM
+        WHERE BOARD_ID = #{boardId}
+    </select>
+
+    <select id="queryItemByUserName" resultMap="ItemInfo">
+        SELECT * FROM T_ITEM
+        WHERE USER_ID IN (
+            SELECT USER_ID FROM T_USER
+            WHERE USER_NAME LIKE concat(concat('%', #{userName}), '%')
+        )
+    </select>
+
+    <select id="queryItemByUserId" resultMap="ItemInfo">
+        SELECT * FROM T_ITEM
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="queryPageOfItem" resultMap="ItemInfo">
+        SELECT * FROM (select t.*,rownum rownu from T_ITEM t
+        where rownum&lt;=#{offset}*#{limit})r
+        where r.rownu&gt;(#{offset}-1)*#{limit}
+    </select>
+
+    <select id="queryItemById" resultMap="ItemInfo">
+        SELECT * FROM T_ITEM
+        WHERE ITEM_ID = #{itemId}
+    </select>
+
+    <select id="queryItemByBoardName" resultMap="ItemInfo">
+        SELECT * FROM T_ITEM
+        WHERE BOARD_ID IN (
+            SELECT BOARD_ID
+            FROM T_BOARD
+            WHERE BOARD_NAME LIKE concat(concat('%', #{boardName}), '%')
+        )
+    </select>
+
+    <select id="queryByItemTitle" resultMap="ItemInfo">
+        SELECT * FROM T_ITEM
+        WHERE ITEM_TITLE LIKE concat(concat('%', ${itemTitle}), '%')
+    </select>
+
+    <update id="updateItem">
+        UPDATE T_ITEM
+        SET ITEM_TITLE = #{itemTitle},
+            ITEM_CONTENT = #{itemContent}
+        WHERE ITEM_ID = #{itemId}
+    </update>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forum.dao.ReplyDao">
+    <resultMap id="ReplyInfo" type="Reply">
+        <result column="reply_id" property="replyId" jdbcType="INTEGER"/>
+        <result column="item_id" property="itemId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="reply_content" property="replyContent" jdbcType="VARBINARY"/>
+        <result column="reply_time" property="replyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="seq_reply_id">seq_reply_id.nextval</sql>
+    
+    <insert id="addReply">
+        <selectKey keyProperty="replyId" resultType="int" order="BEFORE">
+            SELECT <include refid="seq_reply_id"/> FROM dual
+        </selectKey>
+        INSERT INTO
+        t_reply(reply_id, item_id, user_id, reply_content, reply_time)
+                values (#{replyId}, #{itemId}, #{userId}, #{replyContent}, sysdate)
+    </insert>
+
+    <delete id="deleteReply">
+        DELETE FROM T_REPLY
+        WHERE reply_id = #{replyId}
+    </delete>
+
+    <select id="queryReplyByItemId" resultMap="ReplyInfo">
+        SELECT *
+        FROM (SELECT * FROM (select t.*,rownum rownu from T_REPLY t
+        where rownum&lt;=#{offset}*#{limit})r
+        where r.rownu&gt;(#{offset}-1)*#{limit})
+        WHERE item_id = #{itemId}
+
+    </select>
+
+    <select id="queryReplyByUserId" resultMap="ReplyInfo">
+        SELECT *
+        FROM (
+        SELECT * FROM (select t.*,rownum rownu from T_REPLY t
+        where rownum&lt;=#{offset}*#{limit})r
+        where r.rownu&gt;(#{offset}-1)*#{limit})
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="queryReplyCount" parameterType="Long" resultType="Integer">
+        SELECT count(*) FROM T_REPLY
+        WHERE ITEM_ID=#{itemId}
+    </select>
+
+    <update id="updateReply">
+        UPDATE T_REPLY
+        SET REPLY_CONTENT=#{replyContent},
+            reply_time=sysdate
+        WHERE REPLY_ID=#{replyId}
+    </update>
+</mapper>

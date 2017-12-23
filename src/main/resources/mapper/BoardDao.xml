@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forum.dao.BoardDao">
+    <resultMap id="BoardInfo" type="Board">
+        <result column="board_id"  property="boardId" jdbcType="INTEGER"/>
+        <result column="board_name" property="boardName" jdbcType="VARCHAR"/>
+        <result column="board_count" property="boardCount" jdbcType="INTEGER"/>
+        <result column="board_description" property="boardDescription" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="seq_board_id">seq_board_id.nextval</sql>
+
+    <insert id="addBoard">
+        <selectKey keyProperty="boardId" resultType="int" order="BEFORE">
+            select <include refid="seq_board_id" /> from dual
+        </selectKey>
+        insert INTO
+        t_board (board_id, board_name
+        <choose>
+            <when test="boardDescription == null">
+            )
+            values (#{boardId}, #{boardName})
+            </when>
+            <otherwise>
+            , board_description)
+            values (#{boardId}, #{boardName}, #{boardDescription})
+            </otherwise>
+        </choose>
+
+    </insert>
+
+    <delete id="deleteBoard">
+        DELETE FROM T_BOARD
+        WHERE BOARD_ID = #{boardId}
+    </delete>
+
+    <select id="queryPageOfBoard" resultMap="BoardInfo">
+        select * from (select t.*,rownum rownu from T_BOARD t
+        where rownum&lt;=#{offset}*#{limit})r
+        where r.rownu&gt;(#{offset}-1)*#{limit}
+    </select>
+
+    <select id="queryByName" resultMap="BoardInfo">
+        SELECT * FROM T_BOARD
+        WHERE BOARD_NAME like concat(concat('%',#{boardName}),'%')
+    </select>
+
+    <select id="queryById" resultMap="BoardInfo">
+        SELECT * FROM T_BOARD
+        WHERE BOARD_ID=#{boardId}
+    </select>
+
+    <select id="queryNum" resultType="Integer">
+        SELECT count(*) FROM T_ITEM
+        WHERE BOARD_ID=#{boardId}
+    </select>
+
+    <update id="updateBoard">
+        UPDATE T_BOARD
+        SET BOARD_NAME=#{boardName},
+            board_description=#{boardDescription}
+        WHERE BOARD_ID=#{boardId}
+    </update>
+</mapper>
